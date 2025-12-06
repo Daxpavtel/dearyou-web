@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Moon, Star, Sparkles, ArrowRight, Check, ChevronDown, Mail } from 'lucide-react';
+import { Star, Sparkles, ArrowRight, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import PersonalizationForm from './PersonalizationForm';
-import { mockEmailSignup } from '../mock';
+import axios from 'axios';
 import { useToast } from '../hooks/use-toast';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const DearYouLanding = () => {
   const [formOpen, setFormOpen] = useState(false);
@@ -26,16 +29,17 @@ const DearYouLanding = () => {
 
     setEmailLoading(true);
     try {
-      const result = await mockEmailSignup(email);
+      const response = await axios.post(`${API}/email-signup`, { email });
       toast({
         title: 'Success!',
-        description: result.message,
+        description: response.data.message || 'You\'re on the list for early access!',
       });
       setEmail('');
     } catch (error) {
+      console.error('Email signup error:', error);
       toast({
         title: 'Error',
-        description: 'Something went wrong. Please try again.',
+        description: error.response?.data?.detail || 'Something went wrong. Please try again.',
         variant: 'destructive'
       });
     } finally {
@@ -48,8 +52,12 @@ const DearYouLanding = () => {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#0f1419]/80 backdrop-blur-md border-b border-[#d4af37]/20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Moon className="w-6 h-6 text-[#d4af37]" />
+          <div className="flex items-center gap-3">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_identity-tools/artifacts/lpn8t8z1_Gemini_Generated_Image_4zta544zta544zta.png" 
+              alt="DearYou Logo" 
+              className="h-10 w-10 object-contain"
+            />
             <span className="text-xl font-serif text-[#f5f1e8]">DearYou</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -349,7 +357,7 @@ const DearYouLanding = () => {
             {[
               { icon: Star, title: 'Daily repetition', description: 'See your affirmation every single day' },
               { icon: Sparkles, title: 'Identity-based affirmation', description: 'Aligned to who you\'re becoming' },
-              { icon: Moon, title: 'Consistent visual reminders', description: 'Your environment shapes your mind' }
+              { icon: Star, title: 'Consistent visual reminders', description: 'Your environment shapes your mind' }
             ].map((item, idx) => (
               <div key={idx} className="p-6 bg-[#1a2029] border border-[#d4af37]/20 rounded-xl hover:border-[#d4af37]/50 transition-all">
                 <item.icon className="w-10 h-10 text-[#d4af37] mx-auto mb-4" />
@@ -540,8 +548,12 @@ const DearYouLanding = () => {
       <footer className="py-12 px-4 border-t border-[#d4af37]/20">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <Moon className="w-6 h-6 text-[#d4af37]" />
+            <div className="flex items-center gap-3">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_identity-tools/artifacts/lpn8t8z1_Gemini_Generated_Image_4zta544zta544zta.png" 
+                alt="DearYou Logo" 
+                className="h-8 w-8 object-contain"
+              />
               <span className="text-xl font-serif text-[#f5f1e8]">DearYou</span>
             </div>
             <p className="text-gray-400 text-sm">Personalized Identity Journals</p>

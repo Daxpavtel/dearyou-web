@@ -5,8 +5,12 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { mockFormSubmission } from '../mock';
+import { Checkbox } from './ui/checkbox';
+import axios from 'axios';
 import { useToast } from '../hooks/use-toast';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const PersonalizationForm = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -70,10 +74,10 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const result = await mockFormSubmission(formData);
+      const response = await axios.post(`${API}/submit-journal`, formData);
       toast({
         title: 'Success!',
-        description: result.message,
+        description: response.data.message || 'Your journal request has been sent!',
       });
       setTimeout(() => {
         onClose();
@@ -100,9 +104,10 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
         });
       }, 2000);
     } catch (error) {
+      console.error('Form submission error:', error);
       toast({
         title: 'Error',
-        description: 'Something went wrong. Please try again.',
+        description: error.response?.data?.detail || 'Something went wrong. Please try again.',
         variant: 'destructive'
       });
     } finally {
@@ -250,14 +255,16 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   ].map(obstacle => (
                     <div
                       key={obstacle}
+                      className="flex items-center space-x-3 p-3 rounded-lg border border-[#d4af37]/20 hover:border-[#d4af37]/40 hover:bg-[#d4af37]/5 transition-all cursor-pointer"
                       onClick={() => toggleObstacle(obstacle)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                        formData.obstacles.includes(obstacle)
-                          ? 'border-[#d4af37] bg-[#d4af37]/10'
-                          : 'border-[#d4af37]/20 hover:border-[#d4af37]/40 hover:bg-[#d4af37]/5'
-                      }`}
                     >
-                      <span className="text-gray-300">{obstacle}</span>
+                      <Checkbox
+                        id={obstacle}
+                        checked={formData.obstacles.includes(obstacle)}
+                        onCheckedChange={() => toggleObstacle(obstacle)}
+                        className="border-[#d4af37]"
+                      />
+                      <Label htmlFor={obstacle} className="text-gray-300 cursor-pointer flex-1">{obstacle}</Label>
                     </div>
                   ))}
                 </div>
@@ -493,7 +500,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               disabled={isSubmitting}
               className="bg-gradient-to-r from-[#d4af37] to-[#c9a961] hover:from-[#c9a961] hover:to-[#d4af37] text-black font-medium"
             >
-              {isSubmitting ? 'Creating Your Journal...' : 'Complete & Submit'}
+              {isSubmitting ? 'Submitting...' : 'Complete & Submit'}
               <Sparkles className="w-4 h-4 ml-2" />
             </Button>
           )}
