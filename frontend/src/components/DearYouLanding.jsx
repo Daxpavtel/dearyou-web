@@ -251,7 +251,7 @@ const DearYouLanding = () => {
                   { icon: Check, text: 'Minimal, calming design for clear thinking' },
                   { icon: Check, text: 'Printed one-by-one — no two journals are the same' }
                 ].map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
+                  <div key={idx} className="flex items-start gap-3 animate-fade-in-up" style={{animationDelay: `${idx * 0.1}s`}}>
                     <feature.icon className="w-6 h-6 text-[#d4af37] flex-shrink-0 mt-1" />
                     <span className="text-gray-300 text-lg">{feature.text}</span>
                   </div>
