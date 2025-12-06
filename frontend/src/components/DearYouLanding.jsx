@@ -172,7 +172,7 @@ const DearYouLanding = () => {
               'You try journaling but stop after a week.',
               'You save motivation but don\'t act on it.'
             ].map((point, idx) => (
-              <div key={idx} className="p-6 bg-[#1a2029] border border-[#d4af37]/20 rounded-xl">
+              <div key={idx} className="p-6 bg-[#1a2029] border border-[#d4af37]/20 rounded-xl animate-fade-in-up hover:border-[#d4af37]/40 transition-colors duration-300" style={{animationDelay: `${idx * 0.15}s`}}>
                 <p className="text-gray-300">{point}</p>
               </div>
             ))}
