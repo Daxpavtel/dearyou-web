@@ -133,12 +133,12 @@ const DearYouLanding = () => {
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-[#d4af37]/20 blur-3xl rounded-full"></div>
+            <div className="relative animate-slide-in-right">
+              <div className="absolute inset-0 bg-[#d4af37]/20 blur-3xl rounded-full animate-pulse-glow"></div>
               <img
                 src="https://images.unsplash.com/photo-1572129063426-fb1ad9ed15de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwam91cm5hbCUyMG1vY2t1cHxlbnwwfHx8fDE3NjUwMTgxNTZ8MA&ixlib=rb-4.1.0&q=85"
                 alt="DearYou Journal"
-                className="relative rounded-2xl shadow-2xl"
+                className="relative rounded-2xl shadow-2xl animate-float"
               />
             </div>
           </div>
