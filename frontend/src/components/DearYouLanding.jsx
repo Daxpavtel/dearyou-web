@@ -527,16 +527,17 @@ const DearYouLanding = () => {
           />
         </div>
         <div className="container mx-auto max-w-3xl text-center relative z-10 space-y-8">
-          <h2 className="text-5xl md:text-6xl font-serif text-[#f5f1e8] leading-tight">
+          <h2 className="text-5xl md:text-6xl font-serif text-[#f5f1e8] leading-tight animate-fade-in-up">
             Your Future Self Is Already Waiting.
           </h2>
-          <p className="text-2xl text-gray-400">
+          <p className="text-2xl text-gray-400 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             Start showing up for them today.
           </p>
           <Button
             onClick={() => setFormOpen(true)}
             size="lg"
-            className="bg-[#d4af37] hover:bg-[#c9a961] text-black font-medium text-xl px-12 py-6 h-auto"
+            className="bg-[#d4af37] hover:bg-[#c9a961] text-black font-medium text-xl px-12 py-6 h-auto animate-fade-in-up hover:scale-105 transition-transform duration-200"
+            style={{animationDelay: '0.4s'}}
           >
             Start Your Journal
             <ArrowRight className="w-6 h-6 ml-2" />
