@@ -85,8 +85,8 @@ const DearYouLanding = () => {
         </div>
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d4af37]/10 border border-[#d4af37]/30 rounded-full">
+            <div className="space-y-8 animate-slide-in-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d4af37]/10 border border-[#d4af37]/30 rounded-full animate-fade-in">
                 <Star className="w-4 h-4 text-[#d4af37]" />
                 <span className="text-sm text-[#d4af37]">Personalized Identity Journals</span>
               </div>
