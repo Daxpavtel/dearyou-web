@@ -359,8 +359,8 @@ const DearYouLanding = () => {
               { icon: Sparkles, title: 'Identity-based affirmation', description: 'Aligned to who you\'re becoming' },
               { icon: Star, title: 'Consistent visual reminders', description: 'Your environment shapes your mind' }
             ].map((item, idx) => (
-              <div key={idx} className="p-6 bg-[#1a2029] border border-[#d4af37]/20 rounded-xl hover:border-[#d4af37]/50 transition-all">
-                <item.icon className="w-10 h-10 text-[#d4af37] mx-auto mb-4" />
+              <div key={idx} className="p-6 bg-[#1a2029] border border-[#d4af37]/20 rounded-xl hover:border-[#d4af37]/50 transition-all animate-fade-in-up" style={{animationDelay: `${idx * 0.2}s`}}>
+                <item.icon className="w-10 h-10 text-[#d4af37] mx-auto mb-4 animate-float" style={{animationDelay: `${idx * 0.5}s`}} />
                 <h3 className="text-xl font-medium text-[#f5f1e8] mb-2">{item.title}</h3>
                 <p className="text-gray-400 text-sm">{item.description}</p>
               </div>
