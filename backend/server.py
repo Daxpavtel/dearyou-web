@@ -234,7 +234,7 @@ async def email_signup(signup: EmailSignup):
         
         await send_email(email_subject, email_body, notification_email)
         
-        logger.info(f"Email signup saved: {signup.email}")
+        logger.info(f"Email signup saved: {signup.email} with ID: {result.inserted_id}")
         
         return {
             "success": True,
