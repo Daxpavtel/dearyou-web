@@ -40,6 +40,32 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+# Journal Form Models
+class JournalSubmission(BaseModel):
+    currentState: str
+    currentFeeling: str
+    mainGoal: str
+    goalImportance: str
+    futureIdentity: str
+    obstacles: List[str]
+    removeForever: str
+    motivationType: str
+    closestSentence: str
+    aesthetic: str
+    wantPhoto: str
+    affirmationStyle: str
+    guideStyle: str
+    writingAmount: str
+    tonePreference: str
+    futureSelfMessage: str
+    name: Optional[str] = ""
+    personalBelief: Optional[str] = ""
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class EmailSignup(BaseModel):
+    email: EmailStr
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
