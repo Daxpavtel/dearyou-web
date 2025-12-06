@@ -309,7 +309,7 @@ const DearYouLanding = () => {
                 description: 'One page. One affirmation. One aligned action. Repetition becomes identity.'
               }
             ].map((item, idx) => (
-              <div key={idx} className="relative p-8 bg-[#0f1419] border border-[#d4af37]/20 rounded-2xl hover:border-[#d4af37]/50 transition-all group">
+              <div key={idx} className="relative p-8 bg-[#0f1419] border border-[#d4af37]/20 rounded-2xl hover:border-[#d4af37]/50 transition-all group animate-fade-in-up" style={{animationDelay: `${idx * 0.2}s`}}>
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#d4af37] text-black rounded-full flex items-center justify-center text-xl font-bold">
                   {item.step}
                 </div>
