@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, Sparkles, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -57,6 +57,10 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
         ? prev.obstacles.filter(o => o !== obstacle)
         : [...prev.obstacles, obstacle]
     }));
+  };
+
+  const isObstacleChecked = (obstacle) => {
+    return formData.obstacles.includes(obstacle);
   };
 
   const handleNext = () => {
@@ -118,8 +122,8 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-[#0f1419] border border-[#d4af37]/20 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-[#0f1419] border border-[#d4af37]/20 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-scale-in">
         {/* Header */}
         <div className="p-6 border-b border-[#d4af37]/20 flex items-center justify-between">
           <div>
@@ -151,7 +155,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
           {/* Section 1: Identity Snapshot */}
           {currentStep === 1 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Identity Snapshot</h3>
                 <p className="text-gray-400 text-sm">Let's understand where you are right now</p>
@@ -161,7 +165,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                 <Label className="text-[#f5f1e8]">What describes your current state best?</Label>
                 <RadioGroup value={formData.currentState} onValueChange={(val) => updateFormData('currentState', val)}>
                   {['calm', 'confused', 'excited', 'stuck', 'building momentum', 'healing', 'growing', 'reborn'].map(state => (
-                    <div key={state} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={state} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={state} id={state} className="border-[#d4af37]" />
                       <Label htmlFor={state} className="text-gray-300 cursor-pointer capitalize flex-1">{state}</Label>
                     </div>
@@ -176,7 +180,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.currentFeeling}
                   onChange={(e) => updateFormData('currentFeeling', e.target.value)}
                   placeholder="Describe your current emotional state in one sentence..."
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
@@ -184,7 +188,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 2: The Goal / Future Self */}
           {currentStep === 2 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">The Goal / Future Self</h3>
                 <p className="text-gray-400 text-sm">Clarity for your affirmation themes</p>
@@ -197,7 +201,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.mainGoal}
                   onChange={(e) => updateFormData('mainGoal', e.target.value)}
                   placeholder="Be specific about your main goal..."
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
 
@@ -211,7 +215,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Because I want to prove something to myself',
                     'Because it\'s my dream'
                   ].map(reason => (
-                    <div key={reason} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={reason} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={reason} id={reason} className="border-[#d4af37]" />
                       <Label htmlFor={reason} className="text-gray-300 cursor-pointer flex-1">{reason}</Label>
                     </div>
@@ -226,7 +230,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.futureIdentity}
                   onChange={(e) => updateFormData('futureIdentity', e.target.value)}
                   placeholder="e.g., disciplined, peaceful, fearless, confident..."
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
@@ -234,7 +238,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 3: Obstacles & Patterns */}
           {currentStep === 3 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Obstacles & Patterns</h3>
                 <p className="text-gray-400 text-sm">So affirmations are accurate — not random</p>
@@ -242,7 +246,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
               <div className="space-y-4">
                 <Label className="text-[#f5f1e8]">What usually stops you or pulls you backward? (Select all that apply)</Label>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {[
                     'Overthinking',
                     'Fear',
@@ -252,22 +256,43 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Lack of clarity',
                     'Mood swings',
                     'Inconsistency'
-                  ].map(obstacle => (
-                    <div
-                      key={obstacle}
-                      className="flex items-center space-x-3 p-3 rounded-lg border border-[#d4af37]/20 hover:border-[#d4af37]/40 hover:bg-[#d4af37]/5 transition-all cursor-pointer"
-                      onClick={() => toggleObstacle(obstacle)}
-                    >
-                      <Checkbox
-                        id={obstacle}
-                        checked={formData.obstacles.includes(obstacle)}
-                        onCheckedChange={() => toggleObstacle(obstacle)}
-                        className="border-[#d4af37]"
-                      />
-                      <Label htmlFor={obstacle} className="text-gray-300 cursor-pointer flex-1">{obstacle}</Label>
-                    </div>
-                  ))}
+                  ].map((obstacle, idx) => {
+                    const checked = isObstacleChecked(obstacle);
+                    return (
+                      <div
+                        key={obstacle}
+                        onClick={() => toggleObstacle(obstacle)}
+                        className={`checkbox-wrapper flex items-center space-x-3 p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
+                          checked
+                            ? 'border-[#d4af37] bg-[#d4af37]/15 checked'
+                            : 'border-[#d4af37]/20 hover:border-[#d4af37]/40'
+                        } animate-fade-in-up stagger-${idx + 1}`}
+                      >
+                        <div className="relative flex items-center">
+                          <Checkbox
+                            id={obstacle}
+                            checked={checked}
+                            onCheckedChange={() => toggleObstacle(obstacle)}
+                            className="border-[#d4af37] data-[state=checked]:bg-[#d4af37] data-[state=checked]:border-[#d4af37]"
+                          />
+                        </div>
+                        <Label htmlFor={obstacle} className="text-gray-300 cursor-pointer flex-1 font-medium">
+                          {obstacle}
+                        </Label>
+                        {checked && (
+                          <Check className="w-5 h-5 text-[#d4af37] animate-scale-in" />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
+                {formData.obstacles.length > 0 && (
+                  <div className="mt-3 p-3 bg-[#d4af37]/10 border border-[#d4af37]/30 rounded-lg animate-fade-in">
+                    <p className="text-sm text-[#d4af37]">
+                      Selected: {formData.obstacles.join(', ')}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -277,7 +302,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.removeForever}
                   onChange={(e) => updateFormData('removeForever', e.target.value)}
                   placeholder="What holds you back the most?"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
@@ -285,7 +310,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 4: Emotional Anchors */}
           {currentStep === 4 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Emotional Anchors</h3>
                 <p className="text-gray-400 text-sm">Personalize tone + intensity of affirmations</p>
@@ -299,7 +324,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Tough reminders and discipline',
                     'A mix of both'
                   ].map(type => (
-                    <div key={type} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={type} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={type} id={type} className="border-[#d4af37]" />
                       <Label htmlFor={type} className="text-gray-300 cursor-pointer flex-1">{type}</Label>
                     </div>
@@ -317,7 +342,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'My future self deserves this.',
                     'I am unstoppable.'
                   ].map(sentence => (
-                    <div key={sentence} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={sentence} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={sentence} id={sentence} className="border-[#d4af37]" />
                       <Label htmlFor={sentence} className="text-gray-300 cursor-pointer flex-1">{sentence}</Label>
                     </div>
@@ -329,7 +354,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 5: Personalization Details */}
           {currentStep === 5 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Personalization Details</h3>
                 <p className="text-gray-400 text-sm">Visual aesthetic and style preferences</p>
@@ -346,7 +371,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Pastel soft healing',
                     'Dark galaxy alignment'
                   ].map(aesthetic => (
-                    <div key={aesthetic} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={aesthetic} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={aesthetic} id={aesthetic} className="border-[#d4af37]" />
                       <Label htmlFor={aesthetic} className="text-gray-300 cursor-pointer flex-1">{aesthetic}</Label>
                     </div>
@@ -358,7 +383,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                 <Label className="text-[#f5f1e8]">Do you want your future-self photo generated on the cover?</Label>
                 <RadioGroup value={formData.wantPhoto} onValueChange={(val) => updateFormData('wantPhoto', val)}>
                   {['Yes', 'No', 'I want both options to compare'].map(option => (
-                    <div key={option} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={option} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={option} id={option} className="border-[#d4af37]" />
                       <Label htmlFor={option} className="text-gray-300 cursor-pointer flex-1">{option}</Label>
                     </div>
@@ -374,7 +399,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Medium (one line)',
                     'Paragraph style (like scripts/messages)'
                   ].map(style => (
-                    <div key={style} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={style} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={style} id={style} className="border-[#d4af37]" />
                       <Label htmlFor={style} className="text-gray-300 cursor-pointer flex-1">{style}</Label>
                     </div>
@@ -386,7 +411,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 6: Ritual Style */}
           {currentStep === 6 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Ritual Style</h3>
                 <p className="text-gray-400 text-sm">How you'll use your journal daily</p>
@@ -396,7 +421,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                 <Label className="text-[#f5f1e8]">How do you want your journal to guide you:</Label>
                 <RadioGroup value={formData.guideStyle} onValueChange={(val) => updateFormData('guideStyle', val)}>
                   {['Daily prompts', 'Weekly reflection', 'Both'].map(style => (
-                    <div key={style} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={style} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={style} id={style} className="border-[#d4af37]" />
                       <Label htmlFor={style} className="text-gray-300 cursor-pointer flex-1">{style}</Label>
                     </div>
@@ -408,7 +433,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                 <Label className="text-[#f5f1e8]">How much writing do you enjoy?</Label>
                 <RadioGroup value={formData.writingAmount} onValueChange={(val) => updateFormData('writingAmount', val)}>
                   {['Few sentences', 'Full page', 'Depends on the day'].map(amount => (
-                    <div key={amount} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={amount} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={amount} id={amount} className="border-[#d4af37]" />
                       <Label htmlFor={amount} className="text-gray-300 cursor-pointer flex-1">{amount}</Label>
                     </div>
@@ -420,7 +445,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                 <Label className="text-[#f5f1e8]">Choose your frequency reminder message tone:</Label>
                 <RadioGroup value={formData.tonePreference} onValueChange={(val) => updateFormData('tonePreference', val)}>
                   {['Soft + gentle', 'Bold + direct', 'Balanced + realistic'].map(tone => (
-                    <div key={tone} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-colors">
+                    <div key={tone} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
                       <RadioGroupItem value={tone} id={tone} className="border-[#d4af37]" />
                       <Label htmlFor={tone} className="text-gray-300 cursor-pointer flex-1">{tone}</Label>
                     </div>
@@ -432,7 +457,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
           {/* Section 7: Final Personal Touch */}
           {currentStep === 7 && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-fade-in-up">
               <div>
                 <h3 className="text-xl font-serif text-[#f5f1e8] mb-2">Final Personal Touch</h3>
                 <p className="text-gray-400 text-sm">Make this journal uniquely yours</p>
@@ -445,7 +470,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.futureSelfMessage}
                   onChange={(e) => updateFormData('futureSelfMessage', e.target.value)}
                   placeholder="What wisdom would your future self share?"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
 
@@ -456,7 +481,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.name}
                   onChange={(e) => updateFormData('name', e.target.value)}
                   placeholder="Your name"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
 
@@ -467,7 +492,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   value={formData.personalBelief}
                   onChange={(e) => updateFormData('personalBelief', e.target.value)}
                   placeholder="A mantra, quote, or word that means everything to you..."
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
@@ -480,7 +505,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             variant="ghost"
             onClick={handleBack}
             disabled={currentStep === 1}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 hover:text-white transition-all duration-300"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Back
@@ -489,7 +514,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
           {currentStep < totalSteps ? (
             <Button
               onClick={handleNext}
-              className="bg-gradient-to-r from-[#d4af37] to-[#c9a961] hover:from-[#c9a961] hover:to-[#d4af37] text-black font-medium"
+              className="bg-gradient-to-r from-[#d4af37] to-[#c9a961] hover:from-[#c9a961] hover:to-[#d4af37] text-black font-medium transition-all duration-300"
             >
               Next
               <ChevronRight className="w-4 h-4 ml-2" />
@@ -498,7 +523,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="bg-gradient-to-r from-[#d4af37] to-[#c9a961] hover:from-[#c9a961] hover:to-[#d4af37] text-black font-medium"
+              className="bg-gradient-to-r from-[#d4af37] to-[#c9a961] hover:from-[#c9a961] hover:to-[#d4af37] text-black font-medium transition-all duration-300"
             >
               {isSubmitting ? 'Submitting...' : 'Complete & Submit'}
               <Sparkles className="w-4 h-4 ml-2" />
