@@ -19,28 +19,21 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
   const totalSteps = 7;
 
   const [formData, setFormData] = useState({
-    // Section 1
     currentState: '',
     currentFeeling: '',
-    // Section 2
     mainGoal: '',
     goalImportance: '',
     futureIdentity: '',
-    // Section 3
     obstacles: [],
     removeForever: '',
-    // Section 4
     motivationType: '',
     closestSentence: '',
-    // Section 5
     aesthetic: '',
     wantPhoto: '',
     affirmationStyle: '',
-    // Section 6
     guideStyle: '',
     writingAmount: '',
     tonePreference: '',
-    // Section 7
     futureSelfMessage: '',
     name: '',
     personalBelief: ''
@@ -50,18 +43,20 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // FIXED — reliable toggle logic
   const toggleObstacle = (obstacle) => {
-    setFormData(prev => ({
-      ...prev,
-      obstacles: prev.obstacles.includes(obstacle)
-        ? prev.obstacles.filter(o => o !== obstacle)
-        : [...prev.obstacles, obstacle]
-    }));
+    setFormData(prev => {
+      const alreadySelected = prev.obstacles.includes(obstacle);
+      return {
+        ...prev,
+        obstacles: alreadySelected
+          ? prev.obstacles.filter(o => o !== obstacle)
+          : [...prev.obstacles, obstacle]
+      };
+    });
   };
 
-  const isObstacleChecked = (obstacle) => {
-    return formData.obstacles.includes(obstacle);
-  };
+  const isObstacleChecked = (obstacle) => formData.obstacles.includes(obstacle);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -124,6 +119,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
       <div className="bg-[#0f1419] border border-[#d4af37]/20 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-scale-in">
+
         {/* Header */}
         <div className="p-6 border-b border-[#d4af37]/20 flex items-center justify-between">
           <div>
@@ -153,7 +149,8 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
 
         {/* Form Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
-          {/* Section 1: Identity Snapshot */}
+
+          {/* Section 1 */}
           {currentStep === 1 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -186,7 +183,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Section 2: The Goal / Future Self */}
+          {/* Section 2 */}
           {currentStep === 2 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -229,14 +226,14 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                   id="identity"
                   value={formData.futureIdentity}
                   onChange={(e) => updateFormData('futureIdentity', e.target.value)}
-                  placeholder="e.g., disciplined, peaceful, fearless, confident..."
+                  placeholder="e.g., disciplined, peaceful, fearless..."
                   className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 transition-all duration-300 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
           )}
 
-          {/* Section 3: Obstacles & Patterns */}
+          {/* Section 3 — FIXED CHECKBOXES */}
           {currentStep === 3 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -245,7 +242,8 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[#f5f1e8]">What usually stops you or pulls you backward? (Select all that apply)</Label>
+                <Label className="text-[#f5f1e8]">What usually stops you? (Select all that apply)</Label>
+
                 <div className="space-y-3">
                   {[
                     'Overthinking',
@@ -258,27 +256,26 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     'Inconsistency'
                   ].map((obstacle, idx) => {
                     const checked = isObstacleChecked(obstacle);
+
                     return (
                       <div
                         key={obstacle}
-                        onClick={() => toggleObstacle(obstacle)}
-                        className={`checkbox-wrapper flex items-center space-x-3 p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
+                        className={`flex items-center space-x-3 p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
                           checked
-                            ? 'border-[#d4af37] bg-[#d4af37]/15 checked'
+                            ? 'border-[#d4af37] bg-[#d4af37]/15'
                             : 'border-[#d4af37]/20 hover:border-[#d4af37]/40'
-                        } animate-fade-in-up stagger-${idx + 1}`}
+                        }`}
+                        onClick={() => toggleObstacle(obstacle)}
                       >
-                        <div className="relative flex items-center">
-                          <Checkbox
-                            id={obstacle}
-                            checked={checked}
-                            onCheckedChange={() => toggleObstacle(obstacle)}
-                            className="border-[#d4af37] data-[state=checked]:bg-[#d4af37] data-[state=checked]:border-[#d4af37]"
-                          />
-                        </div>
-                        <Label htmlFor={obstacle} className="text-gray-300 cursor-pointer flex-1 font-medium">
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={() => toggleObstacle(obstacle)}
+                          className="border-[#d4af37] data-[state=checked]:bg-[#d4af37] data-[state=checked]:border-[#d4af37]"
+                        />
+                        <Label className="text-gray-300 cursor-pointer flex-1 font-medium">
                           {obstacle}
                         </Label>
+
                         {checked && (
                           <Check className="w-5 h-5 text-[#d4af37] animate-scale-in" />
                         )}
@@ -286,6 +283,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
                     );
                   })}
                 </div>
+
                 {formData.obstacles.length > 0 && (
                   <div className="mt-3 p-3 bg-[#d4af37]/10 border border-[#d4af37]/30 rounded-lg animate-fade-in">
                     <p className="text-sm text-[#d4af37]">
@@ -296,19 +294,18 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="remove" className="text-[#f5f1e8]">If your future self could remove ONE thing from your life forever, what would it be?</Label>
+                <Label className="text-[#f5f1e8]">If your future self could remove ONE thing forever — what would it be?</Label>
                 <Textarea
-                  id="remove"
                   value={formData.removeForever}
                   onChange={(e) => updateFormData('removeForever', e.target.value)}
                   placeholder="What holds you back the most?"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 focus:border-[#d4af37]/50"
                 />
               </div>
             </div>
           )}
 
-          {/* Section 4: Emotional Anchors */}
+          {/* Section 4 */}
           {currentStep === 4 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -352,7 +349,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Section 5: Personalization Details */}
+          {/* Section 5 */}
           {currentStep === 5 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -380,7 +377,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[#f5f1e8]">Do you want your future-self photo generated on the cover?</Label>
+                <Label className="text-[#f5f1e8]">Do you want a future-self photo generated?</Label>
                 <RadioGroup value={formData.wantPhoto} onValueChange={(val) => updateFormData('wantPhoto', val)}>
                   {['Yes', 'No', 'I want both options to compare'].map(option => (
                     <div key={option} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
@@ -392,7 +389,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[#f5f1e8]">Which affirmation style do you prefer?</Label>
+                <Label className="text-[#f5f1e8]">Preferred affirmation style?</Label>
                 <RadioGroup value={formData.affirmationStyle} onValueChange={(val) => updateFormData('affirmationStyle', val)}>
                   {[
                     'Short (2–5 words)',
@@ -409,7 +406,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Section 6: Ritual Style */}
+          {/* Section 6 */}
           {currentStep === 6 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -418,7 +415,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[#f5f1e8]">How do you want your journal to guide you:</Label>
+                <Label className="text-[#f5f1e8]">How do you want your journal to guide you?</Label>
                 <RadioGroup value={formData.guideStyle} onValueChange={(val) => updateFormData('guideStyle', val)}>
                   {['Daily prompts', 'Weekly reflection', 'Both'].map(style => (
                     <div key={style} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
@@ -442,7 +439,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-[#f5f1e8]">Choose your frequency reminder message tone:</Label>
+                <Label className="text-[#f5f1e8]">Choose your reminder tone:</Label>
                 <RadioGroup value={formData.tonePreference} onValueChange={(val) => updateFormData('tonePreference', val)}>
                   {['Soft + gentle', 'Bold + direct', 'Balanced + realistic'].map(tone => (
                     <div key={tone} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#d4af37]/5 transition-all duration-300">
@@ -455,7 +452,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Section 7: Final Personal Touch */}
+          {/* Section 7 */}
           {currentStep === 7 && (
             <div className="space-y-6 animate-fade-in-up">
               <div>
@@ -464,39 +461,43 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="futureMessage" className="text-[#f5f1e8]">If your future self could say ONE sentence to you right now — what would it be?</Label>
+                <Label htmlFor="futureMessage" className="text-[#f5f1e8]">
+                  If your future self could say ONE sentence to you right now — what would it be?
+                </Label>
                 <Textarea
                   id="futureMessage"
                   value={formData.futureSelfMessage}
                   onChange={(e) => updateFormData('futureSelfMessage', e.target.value)}
                   placeholder="What wisdom would your future self share?"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 focus:border-[#d4af37]/50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-[#f5f1e8]">Name to print inside the journal (optional)</Label>
+                <Label htmlFor="name" className="text-[#f5f1e8]">Name to print (optional)</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => updateFormData('name', e.target.value)}
                   placeholder="Your name"
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 transition-all duration-300 focus:border-[#d4af37]/50"
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 focus:border-[#d4af37]/50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="belief" className="text-[#f5f1e8]">Add any personal belief, quote, or word you want included (optional)</Label>
+                <Label htmlFor="belief" className="text-[#f5f1e8]">Any personal quote or mantra (optional)</Label>
                 <Textarea
                   id="belief"
                   value={formData.personalBelief}
                   onChange={(e) => updateFormData('personalBelief', e.target.value)}
-                  placeholder="A mantra, quote, or word that means everything to you..."
-                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 transition-all duration-300 focus:border-[#d4af37]/50"
+                  placeholder="A quote or mantra that means everything to you..."
+                  className="bg-[#1a2029] border-[#d4af37]/20 text-white placeholder:text-gray-500 min-h-24 focus:border-[#d4af37]/50"
                 />
               </div>
+
             </div>
           )}
+
         </div>
 
         {/* Footer Navigation */}
@@ -530,6 +531,7 @@ const PersonalizationForm = ({ isOpen, onClose }) => {
             </Button>
           )}
         </div>
+
       </div>
     </div>
   );
